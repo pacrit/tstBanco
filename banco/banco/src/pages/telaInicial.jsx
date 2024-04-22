@@ -1,4 +1,7 @@
-import "../styles.css";
+import "./telaInicial.css"
+import { useState } from "react";
+import { NavLink } from 'react-router-dom'
+
 import {
   GridColumn,
   FormInput,
@@ -16,6 +19,30 @@ styleLink.href =
 document.head.appendChild(styleLink);
 
 export default function TelaInicio() {
+
+  const [user, setUser] = useState("")
+  const [password, setPassword] = useState("")
+
+  const url = "http://localhost:3000/users"
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    
+    const dataUser = {
+      user,
+      password
+    }
+
+    const res = fetch(url, {
+      method:"POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dataUser)
+    })
+ 
+  }
+
   return (
     <div id="App">
       <div style={{ marginTop: "3em" }}>
@@ -30,13 +57,15 @@ export default function TelaInicio() {
           }}
         >
           <Segment>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <FormInput
                 size="small"
                 icon="user"
                 iconPosition="left"
                 label="Nome da sala"
                 placeholder="Nome"
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
               />
               <FormInput
                 size="small"
@@ -44,18 +73,24 @@ export default function TelaInicio() {
                 iconPosition="left"
                 label="Senha"
                 type="password"
+                placeholder="Insira sua senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
-              <Button color="olive" content="Criar sala" />
+              <Button onClick={handleSubmit} color="olive" content="Entrar" />
             </Form>
             <Divider horizontal>Ou</Divider>
+            <NavLink to="/register">
             <Button
               basic
               color="olive"
-              content="Entrar na sala"
+              content="Criar usuario"
               icon="signup"
               size="big"
+              
             />
+            </NavLink>
           </Segment>
         </div>
       </div>
